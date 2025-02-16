@@ -1,0 +1,7 @@
+vim.api.nvim_set_keymap("n", "<leader>ef", "<cmd>lua vim.diagnostic.open_float()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>d", "<cmd>Telescope diagnostics<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
+vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, {})
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
