@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to your local folder
-LOCAL_FOLDER="/mnt/D/ZettenKasten"
+LOCAL_FOLDER="/media/my-drive/ZettelKasten"
 
 # Path to your Google Drive folder
 REMOTE_FOLDER="gdrive:/My Notes/ZettenKasten"
