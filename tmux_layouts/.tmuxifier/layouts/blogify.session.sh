@@ -1,6 +1,6 @@
 # Set a custom session root path. Default is `$HOME`.
 # Must be called before `initialize_session`.
-session_root "~/D-drive/udemy/nestjs-full-mastery-course/nest-first-app/server"
+session_root "/media/my-drive/study/web-development/nestjs/blogify/server"
 
 # Create session with specified name if it does not already exist. If no
 # argument is given, session name will be based on layout file name.

@@ -176,29 +176,77 @@ autoload -Uz _zinit
 eval "$(tmuxifier init -)"
 # ---------------------------------------------------------------------------
 
-
 # ------------------------- Pomodoro Timer Function ----------------------
-# Generalized Pomodoro function with configurable work and break sessions
+# Configurable work and break sessions
 declare -A pomo_options
 pomo_options["work"]="25"
 pomo_options["break"]="10"
 
+# Function to display progress bar
+show_progress_bar() {
+  local duration=$1
+  local total_seconds=$(( duration * 60 ))
+  local elapsed=0
+
+  while [[ $elapsed -le $total_seconds ]]; do
+    local percentage=$(( (elapsed * 100) / total_seconds ))
+    local remaining=$(( total_seconds - elapsed ))
+    local time_left=$(date -u -d @${remaining} +%M:%S)
+
+    clear
+    echo -e "\n\033[1;32m we are working 🎅\033[0m"
+    echo -e "\033[1;34m$(date +%I:%M%p) - ${time_left}\033[0m"
+    
+    # Progress bar
+    printf "["
+    for ((i = 0; i < percentage / 5; i++)); do printf "▉"; done
+    for ((i = percentage / 5; i < 20; i++)); do printf " "; done
+    printf "] %d%%\n" "$percentage"
+
+    sleep 1
+    ((elapsed++))
+  done
+}
+
 pomodoro () {
   local session=$1
-  local duration=${pomo_options["$session"]}
+  local duration=${2:-${pomo_options["$session"]}}
 
-  if [ -n "$session" ] && [ -n "$duration" ]; then
-    echo "Starting $session for $duration minutes" | lolcat
-    timer "${duration}m"
+  if [[ -n "$session" && -n "$duration" ]]; then
+    # Announce the start of the session
+    spd-say "'$session' session started"
+    
+    show_progress_bar "$duration"
+
+    # Announce the end of the session
     spd-say "'$session' session done"
+    swaync-client -s -t "Pomodoro Timer" -b "'$session' session done! 🎉"
   else
-    echo "Session '$session' not found." | lolcat
+    echo "Session '$session' not found."
   fi
 }
 
 # Aliases for Pomodoro work and break sessions
 alias wo="pomodoro 'work'"
 alias br="pomodoro 'break'"
+
+# Pomodoro Loop: Work → Break → Repeat
+pomodoro_loop () {
+  while true; do
+    pomodoro "work"
+    pomodoro "break"
+  done
+}
+# ---------------------------------------------------------------------------
+# Aliases for Pomodoro work and break sessions
+alias wo="pomodoro 'work'"
+alias br="pomodoro 'break'"
+# ---------------------------------------------------------------------------
+
+
+# ------------------------------ PostgreSQL Aliases ----------------------
+# Alias for starting PostgreSQL service
+alias pgstart="sudo systemctl start postgresql"
 # ---------------------------------------------------------------------------
 
 
