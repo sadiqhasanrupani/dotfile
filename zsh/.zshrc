@@ -43,14 +43,14 @@ export PYTHONPATH="/usr/lib/python3.11/site-packages:$PYTHONPATH"
 # Conda initialization block, will only run when 'active-conda' is set.
 conda_initialize() {
     # Initialize Conda for the shell
-    __conda_setup="$('/mnt/D/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    __conda_setup="$('$HOME/miniconda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
     if [ $? -eq 0 ]; then
         eval "$__conda_setup"
     else
-        if [ -f "/mnt/D/anaconda3/etc/profile.d/conda.sh" ]; then
-            . "/mnt/D/anaconda3/etc/profile.d/conda.sh"
+        if [ -f "$HOME/miniconda/etc/profile.d/conda.sh" ]; then
+            . "$HOME/miniconda/etc/profile.d/conda.sh"
         else
-            export PATH="/mnt/D/anaconda3/bin:$PATH"
+            export PATH="$HOME/miniconda/bin:$PATH"
         fi
     fi
     unset __conda_setup
@@ -70,35 +70,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 
-# -------------------------- Conda Initialization --------------------------
-# Conda initialization block, will only run when 'active-conda' is set.
-conda_initialize() {
-    # Initialize Conda for the shell
-    __conda_setup="$('/mnt/D/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/mnt/D/anaconda3/etc/profile.d/conda.sh" ]; then
-            . "/mnt/D/anaconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="/mnt/D/anaconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
-}
-
-# Aliases to activate and deactivate Conda
-alias active-conda="conda_initialize"
-alias deactive-conda="unset CONDA_EXE; unset _CONDA_ROOT; unset CONDA_DEFAULT_ENV; unset CONDA_PREFIX; unset CONDA_SHLVL; unset conda; unset __conda_setup"
-
-# Conda initialization will only run if active-conda is called
-if [[ -n "$CONDA_EXE" ]]; then
-    conda_initialize
-fi
-# ---------------------------------------------------------------------------
-
-
-# ----------------------------- User Configuration -------------------------
 # Set the default editor to Neovim
 export EDITOR="nvim"
 
@@ -107,10 +78,188 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# ------------------------------ Monitor Brightness Control ----------------------
+# Function to control monitor brightness
+# Usage: m 1 50 (sets laptop brightness to 50%)
+#        m 2 70 (sets HDMI-A-1 monitor brightness to 70%)
+#        m 1 50 2 70 (sets laptop to 50% and HDMI-A-1 to 70%)
+
+# Function to set monitor brightness
+m() {
+  # Check for dual monitor setup (4 arguments)
+  if [[ $# -eq 4 ]]; then
+    local display1=$1
+    local brightness1=$2
+    local display2=$3
+    local brightness2=$4
+    
+    # Validate first display
+    if ! [[ "$display1" =~ ^[1-2]$ ]]; then
+      echo "Error: First display must be 1 (laptop) or 2 (HDMI-A-1)"
+      return 1
+    fi
+    
+    # Validate second display
+    if ! [[ "$display2" =~ ^[1-2]$ ]]; then
+      echo "Error: Second display must be 1 (laptop) or 2 (HDMI-A-1)"
+      return 1
+    fi
+    
+    # Validate first brightness
+    if ! [[ "$brightness1" =~ ^[0-9]+$ ]] || [ "$brightness1" -lt 1 ] || [ "$brightness1" -gt 100 ]; then
+      echo "Error: First brightness must be a number between 1 and 100"
+      return 1
+    fi
+    
+    # Validate second brightness
+    if ! [[ "$brightness2" =~ ^[0-9]+$ ]] || [ "$brightness2" -lt 1 ] || [ "$brightness2" -gt 100 ]; then
+      echo "Error: Second brightness must be a number between 1 and 100"
+      return 1
+    fi
+    
+    # Set both displays
+    # First, set display1
+    if [ "$display1" -eq 1 ]; then
+      echo "Setting laptop screen brightness to $brightness1"
+      brightnessctl set "${brightness1}%"
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ Laptop brightness successfully set to $brightness1"
+      else
+        echo "✗ Failed to set laptop brightness"
+      fi
+    else
+      echo "Setting HDMI-A-1 monitor brightness to $brightness1"
+      sudo ddcutil setvcp 10 "$brightness1" --display 1
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ HDMI-A-1 monitor brightness successfully set to $brightness1"
+      else
+        echo "✗ Failed to set HDMI-A-1 monitor brightness"
+      fi
+    fi
+    
+    # Then, set display2
+    if [ "$display2" -eq 1 ]; then
+      echo "Setting laptop screen brightness to $brightness2"
+      brightnessctl set "${brightness2}%"
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ Laptop brightness successfully set to $brightness2"
+      else
+        echo "✗ Failed to set laptop brightness"
+      fi
+    else
+      echo "Setting HDMI-A-1 monitor brightness to $brightness2"
+      sudo ddcutil setvcp 10 "$brightness2" --display 1
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ HDMI-A-1 monitor brightness successfully set to $brightness2"
+      else
+        echo "✗ Failed to set HDMI-A-1 monitor brightness"
+      fi
+    fi
+    
+    return 0
+  # Original functionality (2 arguments)
+  elif [[ $# -eq 2 ]]; then
+    local display=$1
+    local brightness=$2
+    
+    # Validate display is either 1 or 2
+    if ! [[ "$display" =~ ^[1-2]$ ]]; then
+      echo "Error: Display must be 1 (laptop) or 2 (HDMI-A-1)"
+      return 1
+    fi
+    
+    # Validate brightness is a number between 1-100
+    if ! [[ "$brightness" =~ ^[0-9]+$ ]] || [ "$brightness" -lt 1 ] || [ "$brightness" -gt 100 ]; then
+      echo "Error: Brightness must be a number between 1 and 100"
+      return 1
+    fi
+    
+    if [ "$display" -eq 1 ]; then
+      # Display 1 - Laptop screen using brightnessctl
+      echo "Setting laptop screen brightness to $brightness"
+      brightnessctl set "${brightness}%"
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ Laptop brightness successfully set to $brightness"
+      else
+        echo "✗ Failed to set laptop brightness"
+      fi
+    else
+      # Display 2 - HDMI-A-1 monitor using ddcutil
+      echo "Setting HDMI-A-1 monitor brightness to $brightness"
+      sudo ddcutil setvcp 10 "$brightness" --display 1
+      
+      if [ $? -eq 0 ]; then
+        echo "✓ HDMI-A-1 monitor brightness successfully set to $brightness"
+      else
+        echo "✗ Failed to set HDMI-A-1 monitor brightness"
+      fi
+    fi
+  # Invalid number of arguments
+  else
+    echo "Usage: m <display-number> <brightness-value>"
+    echo "       m <display1-number> <brightness1-value> <display2-number> <brightness2-value>"
+    echo "Example: m 1 50 (laptop screen)"
+    echo "         m 2 70 (HDMI-A-1 monitor)"
+    echo "         m 1 50 2 70 (sets laptop to 50% and HDMI-A-1 to 70%)"
+    return 1
+  fi
+}
+
+# Function to set laptop brightness
+m1() {
+  local brightness=$1
+  
+  # Validate brightness is a number between 1-100
+  if ! [[ "$brightness" =~ ^[0-9]+$ ]] || [ "$brightness" -lt 1 ] || [ "$brightness" -gt 100 ]; then
+    echo "Error: Brightness must be a number between 1 and 100"
+    return 1
+  fi
+  
+  # Set laptop screen brightness using brightnessctl
+  echo "Setting laptop screen brightness to $brightness"
+  brightnessctl set "${brightness}%"
+  
+  if [ $? -eq 0 ]; then
+    echo "✓ Laptop brightness successfully set to $brightness"
+  else
+    echo "✗ Failed to set laptop brightness"
+  fi
+}
+
+# Function to set external monitor brightness
+m2() {
+  local brightness=$1
+  
+  # Validate brightness is a number between 1-100
+  if ! [[ "$brightness" =~ ^[0-9]+$ ]] || [ "$brightness" -lt 1 ] || [ "$brightness" -gt 100 ]; then
+    echo "Error: Brightness must be a number between 1 and 100"
+    return 1
+  fi
+  
+  # Set HDMI-A-1 monitor brightness using ddcutil
+  echo "Setting HDMI-A-1 monitor brightness to $brightness"
+  sudo ddcutil setvcp 10 "$brightness" --display 1
+  
+  if [ $? -eq 0 ]; then
+    echo "✓ HDMI-A-1 monitor brightness successfully set to $brightness"
+  else
+    echo "✗ Failed to set HDMI-A-1 monitor brightness"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+
 # ------------------------------- Aliases -------------------------------
 alias code='code'
 alias ls="ls --color"
 alias mnt-drive="~/dotfile/mntdrive/mntntfs.sh"
+
+# Monitor brightness aliases are removed in favor of the 'm' command
 
 # ----------------------------- Zinit Setup -------------------------------
 # Zinit plugin manager setup for advanced plugin management
@@ -268,3 +417,10 @@ zinit light-mode for \
 # ------------------------------ Nerdfetch -----------------------------------
 nerdfetch
 # ----------------------------------------------------------------------------
+
+# Aliases to activate and deactivate Conda
+alias active-conda='conda_initialize'
+alias deactive-conda='conda deactivate'
+
+# Conda initialization will only run if active-conda is called
+
