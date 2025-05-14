@@ -1,10 +1,11 @@
 # Set a custom session root path. Default is `$HOME`.
 # Must be called before `initialize_session`.
-session_root "/media/my-drive/study/web-development/nestjs/blogify/server"
+session_root "~/d-drive/projects/applications/nxtdoor-app/nxtdoor-backend"
+
 
 # Create session with specified name if it does not already exist. If no
 # argument is given, session name will be based on layout file name.
-if initialize_session "blogify"; then
+if initialize_session "nxtdoor-backend"; then
 
   # Window 0: editor 
   new_window "editor"
@@ -21,19 +22,19 @@ if initialize_session "blogify"; then
 
   # Window 2: yazi file manager 
   new_window "yazi"
-  run_cmd "yazi"  
+  # run_cmd "yazi"  
 
   # Window 3: git manager
   new_window "git-manager"
-  run_cmd "lazygit"
+  # run_cmd "lazygit"
 
   # Window 3: docker manager
   new_window "docker-manager"
-  run_cmd "lazydocker"
+  # run_cmd "lazydocker"
  
   # Window 4: db 
   new_window "db"
-  run_cmd "sudo -i -u postgres psql"
+  # run_cmd "sudo -i -u postgres psql"
 
   select_window 0
 

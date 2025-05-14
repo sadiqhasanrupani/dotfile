@@ -258,6 +258,7 @@ m2() {
 alias code='code'
 alias ls="ls --color"
 alias mnt-drive="~/dotfile/mntdrive/mntntfs.sh"
+alias mysql="/usr/local/mysql-8.4.4/bin/mysql -u root -p -P 3307 -h 127.0.0.1"
 
 # Monitor brightness aliases are removed in favor of the 'm' command
 

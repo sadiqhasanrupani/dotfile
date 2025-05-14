@@ -4,7 +4,7 @@ vim.cmd "set softtabstop=2"
 vim.cmd "set shiftwidth=2"
 vim.cmd "set number"
 vim.cmd "set relativenumber"
-vim.cmd "set guicursor="
+-- vim.cmd "set guicursor="
 vim.opt.clipboard = "unnamedplus"
 
 vim.keymap.set("n", "<Leader>cp", ":w !xclip -selection clipboard<CR>", { desc = "For Clipboard" })

@@ -1,39 +1,34 @@
 # Set a custom session root path. Default is `$HOME`.
 # Must be called before `initialize_session`.
-session_root "~/D-drive/projects/ExpenzeIO"
+session_root "~/d-drive/projects/web-development/personal-projects/expenzeio/expenzeIo-server"
 
 # Create session with specified name if it does not already exist.
 # If no argument is given, session name will be based on layout file name.
-if initialize_session "expenze-io"; then
+if initialize_session "expenzeio-server"; then
 
-  # Window 0: server
+  # Window 0: editor 
+  new_window "editor"
+  run_cmd "nvim ./app/main.go"
+
+  # Window 1: server 
   new_window "server"
-  split_v 20  # Split vertically, giving 20% to the new pane
-  run_cmd "cd expenze-io-server && air"  # Start the server in the top pane
+  run_cmd "air" 
 
-  split_h 50  # Split the bottom pane horizontally into two
+  # Window 2: yazi file manager 
+  new_window "yazi"
+  run_cmd "yazi"  
   
+  # Window 3: git manager
+  new_window "git-manager"
+  # run_cmd "lazygit"
+
+  # Window 3: docker manager
+  new_window "docker-manager"
+  # run_cmd "lazydocker"
+ 
+  # Window 4: db 
+  new_window "postgres"
   run_cmd "sudo -i -u postgres psql"
-  split_h
-  run_cmd "sudo systemctl start postgresql"
-
-  select_pane 0  # Go back to the top pane
-  run_cmd "cd expenze-io-server; nvim ./app/main.go"
-
-  # Window 1: docker
-  new_window "docker"
-  split_v 20 
-  select_pane 0
-
-  # Window 2: flutter
-  new_window "flutter"
-  select_pane 0
-  run_cmd "cd expenze_io"
-
-  # Window 3: react
-  new_window "react"
-  select_pane 0
-  run_cmd "cd expenze-io-web"
 
 #   run_cmd "sudo docker run -d \ --name pgadmin \
 #   --rm \

@@ -1,6 +1,6 @@
 # Set a custom session root path. Default is `$HOME`.
 # Must be called before `initialize_session`.
-session_root "~/D-drive/projects/freelance stuff/glory-fitness"
+session_root "~/d-drive/projects/web-development/personal-projects/glory-gym"
 
 # Create session with specified name if it does not already exist. If no
 # argument is given, session name will be based on layout file name.
