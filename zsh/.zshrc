@@ -255,12 +255,34 @@ m2() {
 # ---------------------------------------------------------------------------
 
 # ------------------------------- Aliases -------------------------------
+
 alias code='code'
 alias ls="ls --color"
 alias mnt-drive="~/dotfile/mntdrive/mntntfs.sh"
 alias mysql="/usr/local/mysql-8.4.4/bin/mysql -u root -p -P 3307 -h 127.0.0.1"
 
+# ---------------------------------------------------------------------------
+
 # Monitor brightness aliases are removed in favor of the 'm' command
+
+# ------------------------------- Github Aliases -------------------------------
+
+alias gs="git status"
+alias gd="git diff"
+
+alias ga="git add"
+alias gc="git commit"
+
+alias gu="git pull"
+alias gp"git push"
+
+alias gl="git log"
+alias gb"git branch"
+
+alias gi="git init"
+alias gcl"git clone"
+
+# ------------------------------------------------------------------------------
 
 # ----------------------------- Zinit Setup -------------------------------
 # Zinit plugin manager setup for advanced plugin management

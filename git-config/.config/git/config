@@ -1,0 +1,13 @@
+[user]
+  name = Sadiqhasan Rupani
+  email = sadiqhasanrupani11@gmail.com
+
+[core]
+  compression = 9
+  whitespace = error
+  preloadindex = true
+
+[advice]
+  addEmptyPathspec = false
+  pushNonFastForward = false
+  statusHints = false
