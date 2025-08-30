@@ -32,7 +32,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # ------------------------------ Path Configuration ------------------------
 # Add custom paths to $PATH variable
 export PATH="$HOME/.tmuxifier/bin:$PATH"
-export PATH="/opt/flutter/bin:$PATH"
+export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 
 # Set Python-related paths

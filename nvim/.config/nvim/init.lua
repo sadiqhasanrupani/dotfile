@@ -1,8 +1,8 @@
 -- options configs
-require "options"
+require("options")
 
 -- lazy.nvim configs
-require "config.lazy"
+require("config.lazy")
 
 -- require "core"
 --

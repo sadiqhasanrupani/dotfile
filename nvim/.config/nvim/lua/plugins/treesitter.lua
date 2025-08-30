@@ -6,9 +6,15 @@ return {
     config = function()
       local treeSConfig = require "nvim-treesitter.configs"
       treeSConfig.setup {
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true },
+        auto_install = false, -- Disable auto install
+        highlight = { 
+          enable = true,
+          disable = { "go", "gomod", "gosum", "gowork" }, -- Completely disable Go-related highlighting
+        },
+        indent = { 
+          enable = true,
+          disable = { "go", "gomod", "gosum", "gowork" } -- Disable Go indentation as well
+        },
         ensure_installed = { "ruby", "json", "php", "html", "python" },
       }
 
@@ -21,6 +27,14 @@ return {
         },
         filetype = "blade",
       }
+      
+      -- Create autocmd to force disable treesitter for Go files
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "go", "gomod", "gosum", "gowork" },
+        callback = function()
+          vim.treesitter.stop()
+        end,
+      })
     end,
   },
 }

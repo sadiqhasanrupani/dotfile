@@ -1,82 +1,129 @@
 return {
 
-  -- mason setup
-  {
-    "williamboman/mason.nvim",
-    lazy = false,
-    config = function()
-      require("mason").setup()
-    end,
-  },
+	-- mason setup
+	{
+		"williamboman/mason.nvim",
+		lazy = false,
+		config = function()
+			require("mason").setup()
+		end,
+	},
 
-  -- mason lsp setup
-  {
-    "williamboman/mason-lspconfig.nvim",
-    lazy = false,
-    opts = {
-      auto_install = true,
-      ensure_installed = { "gopls", "tailwindcss", "lua_ls", "intelephense", "jdtls", "pyright", "bashls" },
-    },
-    config = function() end,
-  },
+	-- mason lsp setup
+	{
+		"williamboman/mason-lspconfig.nvim",
+		lazy = false,
+		opts = {
+			auto_install = true,
+			ensure_installed = {
+				"gopls",
+				"tailwindcss",
+				"lua_ls",
+				"intelephense",
+				"jdtls",
+				"pyright",
+				"bashls",
+				"cssls",
+			},
+		},
+		config = function() end,
+	},
 
-  -- neo vim lsps setup
-  {
-    "neovim/nvim-lspconfig",
-    -- opts = {
-    --   servers = {
-    --     tailwindcss = {},
-    --   },
-    -- },
-    config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require("lspconfig")
+	-- neo vim lsps setup
+	{
+		"neovim/nvim-lspconfig",
+		-- opts = {
+		--   servers = {
+		--     tailwindcss = {},
+		--   },
+		-- },
+		config = function()
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local lspconfig = require("lspconfig")
 
-      lspconfig.lua_ls.setup({ capabilities = capabilities })
-      lspconfig.ts_ls.setup({ capabilities = capabilities })
-      lspconfig.dockerls.setup({ capabilities = capabilities })
-      lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
-      lspconfig.sqlls.setup({ capabilities = capabilities })
-      lspconfig.cssls.setup({ capabilities = capabilities })
-      lspconfig.gopls.setup({ capabilities = capabilities })
-      lspconfig.tailwindcss.setup({ capabilities = capabilities })
-      lspconfig.dartls.setup({ capabilities = capabilities })
-      lspconfig.solargraph.setup({ capabilities = capabilities })
-      lspconfig.yamlls.setup({ capabilities = capabilities })
-      lspconfig.ruby_lsp.setup({ capabilities = capabilities })
-      lspconfig.intelephense.setup({ capabilities = capabilities })
-      lspconfig.jdtls.setup({ capabilities = capabilities })
-      lspconfig.pyright.setup({ capabilities = capabilities })
-      lspconfig.bashls.setup({ capabilities = capabilities })
+			lspconfig.lua_ls.setup({ capabilities = capabilities })
+			lspconfig.ts_ls.setup({ capabilities = capabilities })
+			lspconfig.dockerls.setup({ capabilities = capabilities })
+			lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
+			lspconfig.sqlls.setup({ capabilities = capabilities })
+			lspconfig.cssls.setup({ capabilities = capabilities })
+			lspconfig.gopls.setup({
+				capabilities = capabilities,
+				settings = {
+					gopls = {
+						gofumpt = true,
+						codelenses = {
+							gc_details = false,
+							generate = true,
+							regenerate_cgo = true,
+							run_govulncheck = true,
+							test = true,
+							tidy = true,
+							upgrade_dependency = true,
+							vendor = true,
+						},
+						hints = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+						analyses = {
+							fieldalignment = true,
+							nilness = true,
+							unusedparams = true,
+							unusedwrite = true,
+							useany = true,
+						},
+						usePlaceholders = true,
+						completeUnimported = true,
+						staticcheck = true,
+						directoryFilters = { "-node_modules" },
+						semantictokens = true,
+					},
+				},
+			})
+			lspconfig.tailwindcss.setup({ capabilities = capabilities })
+			lspconfig.dartls.setup({ capabilities = capabilities })
+			lspconfig.solargraph.setup({ capabilities = capabilities })
+			lspconfig.yamlls.setup({ capabilities = capabilities })
+			lspconfig.ruby_lsp.setup({ capabilities = capabilities })
+			lspconfig.intelephense.setup({ capabilities = capabilities })
+			lspconfig.jdtls.setup({ capabilities = capabilities })
+			lspconfig.pyright.setup({ capabilities = capabilities })
+			lspconfig.bashls.setup({ capabilities = capabilities })
 
-      -- lspconfig.html_lsp.setup { capabilities = capabilities }
-      -- require("mason-lspconfig").setup_handlers {
-      --
-      --   function(server_name)
-      --     if server_name ~= "jdtls" then
-      --       lspconfig[server_name].setup {
-      --         capabilities = capabilities,
-      --       }
-      --     end
-      --   end,
-      -- }
+			-- lspconfig.html_lsp.setup { capabilities = capabilities }
+			-- require("mason-lspconfig").setup_handlers {
+			--
+			--   function(server_name)
+			--     if server_name ~= "jdtls" then
+			--       lspconfig[server_name].setup {
+			--         capabilities = capabilities,
+			--       }
+			--     end
+			--   end,
+			-- }
 
-      -- lspconfig.ast_grep.setup({})
-      -- lspconfig.zls.setup({})
-      -- lspconfig.biome.setup({})
-      -- lspconfig.vuels.setup({ capabilities = capabilities })
+			-- lspconfig.ast_grep.setup({})
+			-- lspconfig.zls.setup({})
+			-- lspconfig.biome.setup({})
+			-- lspconfig.vuels.setup({ capabilities = capabilities })
 
-      -- keybindings for lsp
-      require("keymaps.lsp-keybinds")
-    end,
-  },
+			-- keybindings for lsp
+			require("keymaps.lsp-keybinds")
+		end,
+	},
 
-  -- comment setup
+	-- comment setup
 
-  {
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
-  },
+	{
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
+		end,
+	},
 }
