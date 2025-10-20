@@ -348,6 +348,73 @@ autoload -Uz _zinit
 eval "$(tmuxifier init -)"
 # ---------------------------------------------------------------------------
 
+# ============================
+# 🖥️ Hyprland Monitor Control
+# ============================
+
+# Adjust monitor names if needed (check with `hyprctl monitors`)
+M1="eDP-1"       # Laptop/internal display
+M2="HDMI-A-1"    # External monitor
+
+# ========== Functions ==========
+
+enable-m1() {
+  hyprctl keyword monitor "$M1,1920x1080@60,0x0,1"
+  echo "✅ Enabled laptop monitor ($M1)"
+}
+
+disable-m1() {
+  # Prevent disabling both monitors
+  if hyprctl monitors | grep -q "$M2 (disabled)"; then
+    echo "⚠️  Cannot disable both monitors! ($M1 and $M2)"
+    return 1
+  fi
+  hyprctl keyword monitor "$M1,disable"
+  echo "🚫 Disabled laptop monitor ($M1)"
+}
+
+enable-m2() {
+  hyprctl keyword monitor "$M2,1920x1080@60,0x0,1"
+  echo "✅ Enabled external monitor ($M2)"
+}
+
+disable-m2() {
+  # Prevent disabling both monitors
+  if hyprctl monitors | grep -q "$M1 (disabled)"; then
+    echo "⚠️  Cannot disable both monitors! ($M1 and $M2)"
+    return 1
+  fi
+  hyprctl keyword monitor "$M2,disable"
+  echo "🚫 Disabled external monitor ($M2)"
+}
+
+# Optional: Toggle both at once
+toggle-m1() {
+  if hyprctl monitors | grep -q "$M1 (disabled)"; then
+    enable-m1
+  else
+    disable-m1
+  fi
+}
+
+toggle-m2() {
+  if hyprctl monitors | grep -q "$M2 (disabled)"; then
+    enable-m2
+  else
+    disable-m2
+  fi
+}
+
+# ============================
+# ✅ Usage:
+#   enable-m1     → Enable laptop display
+#   disable-m1    → Disable laptop display
+#   enable-m2     → Enable external HDMI display
+#   disable-m2    → Disable external HDMI display
+#   toggle-m1     → Toggle laptop display on/off
+#   toggle-m2     → Toggle HDMI display on/off
+# ============================
+
 # ------------------------- Pomodoro Timer Function ----------------------
 # Configurable work and break sessions
 declare -A pomo_options

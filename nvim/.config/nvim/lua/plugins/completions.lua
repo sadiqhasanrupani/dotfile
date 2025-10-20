@@ -16,6 +16,7 @@ return {
       local s = ls.snippet
       local t = ls.text_node
       local i = ls.insert_node
+      local c = ls.choice_node
 
       -- Add custom snippets for JavaScript and JSX
       ls.add_snippets("javascriptreact", {
@@ -70,6 +71,63 @@ return {
           },
         }),
       })
+      
+      -- Add custom GORM snippets for Go
+      ls.add_snippets("go", {
+        -- Basic GORM struct tag snippet with common options
+        s("gorm", {
+          t('`gorm:"'),
+          c(1, {
+            t("primaryKey"),
+            t("uniqueIndex"),
+            t("size:255"),
+            t("not null"),
+            t("type:varchar(255)"),
+            t("type:enum('customer','admin')"),
+            t("column:"),
+            t("default:"),
+            t("index"),
+            t("autoCreateTime"),
+            t("autoUpdateTime"),
+            t("-"), -- Skip field
+            t(""), -- Empty for custom input
+          }),
+          i(2), -- For additional input after choice
+          t('"`'),
+        }),
+        
+        -- Advanced multi-option GORM tag snippet
+        s("gormtag", {
+          t('`gorm:"'),
+          c(1, {
+            t("primaryKey;autoIncrement"),
+            t("uniqueIndex;not null"),
+            t("size:255;not null"),
+            t("type:varchar(255);not null"),
+            t("type:enum('customer','admin');default:'customer'"),
+            t("column:"),
+            t(""), -- Empty for custom input
+          }),
+          i(2), -- For additional input after choice
+          t('"`'),
+        }),
+        
+        -- Combined GORM and JSON tags (common pattern)
+        s("jsongorm", {
+          t('`gorm:"'),
+          c(1, {
+            t("column:"),
+            t("primaryKey"),
+            t("uniqueIndex"),
+            t("size:255"),
+            t("not null"),
+          }),
+          i(2), -- For additional input after choice
+          t('" json:"'),
+          i(3, "field_name"),
+          t('"`'),
+        }),
+      })
 
       -- Optional key mappings for expanding snippets
       vim.api.nvim_set_keymap(
@@ -79,6 +137,19 @@ return {
         { silent = true, noremap = true }
       )
       vim.api.nvim_set_keymap("s", "<C-k>", "<cmd>lua require'luasnip'.jump(1)<CR>", { silent = true, noremap = true })
+      -- Add key mapping for cycling through choices in choice nodes
+      vim.api.nvim_set_keymap(
+        "i", 
+        "<C-l>", 
+        "<cmd>lua require'luasnip'.change_choice(1)<CR>", 
+        { silent = true, noremap = true }
+      )
+      vim.api.nvim_set_keymap(
+        "s", 
+        "<C-l>", 
+        "<cmd>lua require'luasnip'.change_choice(1)<CR>", 
+        { silent = true, noremap = true }
+      )
     end,
   },
 
