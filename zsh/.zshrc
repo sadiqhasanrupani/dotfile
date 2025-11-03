@@ -17,9 +17,9 @@ SAVEHIST=50000
 
 # append completions to fpath
 # fpath=(${ASDF_DIR}/completions $fpath)
+#
 # initialise completions with ZSH's compinit
-
-# autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit
 
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -67,7 +67,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 
 # Set the default editor to Neovim
