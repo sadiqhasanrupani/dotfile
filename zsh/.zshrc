@@ -514,3 +514,6 @@ alias deactive-conda='conda deactivate'
 
 # Conda initialization will only run if active-conda is called
 
+
+# opencode
+export PATH=/home/sadiq/.opencode/bin:$PATH
