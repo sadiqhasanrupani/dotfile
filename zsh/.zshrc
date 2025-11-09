@@ -517,3 +517,32 @@ alias deactive-conda='conda deactivate'
 
 # opencode
 export PATH=/home/sadiq/.opencode/bin:$PATH
+
+# pnpm
+export PNPM_HOME="/home/sadiq/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+
+# ------------------------------ Nerdfetch -----------------------------------
+
+export ANDROID_HOME=/opt/android-sdk
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/emulator
+
+# ----------------------------------------------------------------------------
+export PATH="$PATH:/opt/flutter/bin"
+
+. "$HOME/.local/share/../bin/env"
+
+# ------------------------------ droidcam-cli setup -----------------------------------
+
+# load DroidCam + OBS helper (auto-setup if needed)
+# source "$HOME/.config/droidcam/setup.sh"
+alias connect-camera='droidcam-cli 10.200.137.116 4747'
+
+# ----------------------------------------------------------------------------

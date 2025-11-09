@@ -1,6 +1,6 @@
 # Set a custom session root path. Default is `$HOME`.
 # Must be called before `initialize_session`.
-session_root "~/my-drive/data/projects/web-development/personal-projects/edugate-major-project"
+session_root "/mnt/data/projects/web-dev/edugate-major-project"
 
 # Create session with specified name if it does not already exist. If no
 # argument is given, session name will be based on layout file name.
@@ -8,16 +8,15 @@ if initialize_session "edugate"; then
 
   # Create a new window inline within session layout definition.
   new_window "client"
-  split_h 20
-
-  split_h 40
+  split_v
+  split_h
   select_pane 1
   run_cmd "cd client && npm start"
  
   new_window "server"
-  split_h 20
+  split_v
   run_cmd "cd server && npm run watch-tsc"
-  split_v 50
+  split_h
   run_cmd "cd server && npm run dev"
 
   # Load a defined window layout.
